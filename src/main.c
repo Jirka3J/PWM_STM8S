@@ -21,8 +21,8 @@ void init(void)
 
     TIM2_TimeBaseInit(TIM2_PRESCALER_16, 1000 - 1);
     TIM2_OC1Init(TIM2_OCMODE_PWM1,TIM2_OUTPUTSTATE_ENABLE, 100 , TIM2_OCPOLARITY_HIGH);
-    TIM2_OC2Init(TIM2_OCMODE_PWM1,TIM2_OUTPUTSTATE_ENABLE, 200 , TIM2_OCPOLARITY_HIGH);
-    TIM2_OC3Init(TIM2_OCMODE_PWM1,TIM2_OUTPUTSTATE_ENABLE, 1000 , TIM2_OCPOLARITY_HIGH);
+    TIM2_OC2Init(TIM2_OCMODE_PWM1,TIM2_OUTPUTSTATE_ENABLE, 0 , TIM2_OCPOLARITY_HIGH);
+    TIM2_OC3Init(TIM2_OCMODE_PWM1,TIM2_OUTPUTSTATE_ENABLE, 0 , TIM2_OCPOLARITY_HIGH);
 
     TIM2_OC1PreloadConfig(ENABLE);
     TIM2_OC2PreloadConfig(ENABLE);
@@ -40,19 +40,37 @@ void init(void)
 
 int main(void)
 {
-  
+    uint8_t btn = 0;
     uint32_t time = 0;
+    uint8_t color = 0;
+    uint16_t value = 1000;
 
     init();
+    
 
     while (1) {
-
-        if (milis() - time > 333 ) {
-            REVERSE(LED); 
+        switch (color){
+            case 1:
+                TIM2_SetCompare1(value);
+            case 2:
+                TIM2_SetCompare2(value);
+            case 3:
+                TIM2_SetCompare3(value);
+        }
+        if (milis()-time>10){
             time = milis();
-            //printf("%ld\n", time);
-          }
-        //delay_ms(333);
+            if (PUSH(S1)==1) {
+                btn = 1;
+            }else{
+                if (btn ==1){
+                    btn = 0;
+                    color ++;
+                }
+            }
+        }
+        if (color>3){
+            color=1;
+        }
     }
 }
 
