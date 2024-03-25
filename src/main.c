@@ -16,8 +16,8 @@ void init(void)
     GPIO_Init(PWM_B_PORT, PWM_B_PIN, GPIO_MODE_OUT_PP_LOW_SLOW);
     GPIO_Init(PWM_G_PORT, PWM_G_PIN, GPIO_MODE_OUT_PP_LOW_SLOW);
     GPIO_Init(S1_PORT, S1_PIN,GPIO_MODE_IN_PU_NO_IT);
-    GPIO_Init(S1_PORT, S1_PIN,GPIO_MODE_IN_PU_NO_IT);
-    GPIO_Init(S1_PORT, S1_PIN,GPIO_MODE_IN_PU_NO_IT);
+    GPIO_Init(S2_PORT, S2_PIN,GPIO_MODE_IN_PU_NO_IT);
+    GPIO_Init(S3_PORT, S3_PIN,GPIO_MODE_IN_PU_NO_IT);
 
     TIM2_TimeBaseInit(TIM2_PRESCALER_16, 1000 - 1);
     TIM2_OC1Init(TIM2_OCMODE_PWM1,TIM2_OUTPUTSTATE_ENABLE, 100 , TIM2_OCPOLARITY_HIGH);
@@ -59,19 +59,15 @@ int main(void)
         }
         if (milis()-time>10){
             time = milis();
-            if (PUSH(S1)==1) {
-                btn = 1;
-            }else{
-                if (btn ==1){
-                    btn = 0;
-                    color ++;
+            if (!PUSH(S1)&& btn) {            
+                if (color++>3){
+                    color=1;
                 }
             }
-        }
-        if (color>3){
-            color=1;
-        }
+            btn = PUSH(S1);
+
     }
+}
 }
 
 
