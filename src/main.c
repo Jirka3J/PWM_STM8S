@@ -52,10 +52,13 @@ int main(void)
         switch (color){
             case 1:
                 TIM2_SetCompare1(value);
+                break;
             case 2:
                 TIM2_SetCompare2(value);
+                break;
             case 3:
                 TIM2_SetCompare3(value);
+                break;
         }
         if (milis()-time>10){
             time = milis();
